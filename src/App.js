@@ -1,25 +1,16 @@
 import React, { PureComponent } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { Select } from './components/Select';
 import { Form, FormChild } from './components/Form';
+import { BUTTONS, POLITIKBEREICH } from './constants';
 import './styles/App.scss';
 
 class App extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.formButtons = [
-      {
-        name: 'Suchen',
-        type: 'primary',
-        method: () => {},
-      },
-      {
-        name: 'Suche zurücksetzen',
-        type: 'secondary',
-        method: () => {},
-      },
-    ];
+    this.state = {};
   }
 
   render() {
@@ -31,8 +22,50 @@ class App extends PureComponent {
   
         <Header visibility={true} />
 
-        <Form title="Suche" buttons={this.formButtons}>
-          <FormChild label="Stichwortsuche" tooltip={tooltip}>input...</FormChild>
+        <Form title="Suche" buttons={BUTTONS}>
+          <FormChild label="Stichwortsuche" tooltip={tooltip}>
+            <input type="search" className="input" />
+          </FormChild>
+
+          <FormChild label="Name">
+            <input type="text" className="input" />
+          </FormChild>
+
+          <FormChild label="Geber">
+            <select className="input">
+              <option value="-- Alles --">-- Alles --</option>
+            </select>
+          </FormChild>
+
+          <FormChild label="Art">
+            <select className="input">
+              <option value="-- Alles --">-- Alles --</option>
+            </select>
+          </FormChild>
+
+
+          <FormChild label="Jahr">
+            <select className="input">
+              <option value="-- Alles --">-- Alles --</option>
+            </select>
+          </FormChild>
+
+
+          <FormChild label="Politikbereich">
+            <select className="input">
+              <option value="-- Alles --">-- Alles --</option>
+              {POLITIKBEREICH.map((option, index) =>
+                <option key={`option_${index}`} value={option.value}>{option.label}</option>)}
+            </select>
+          </FormChild>
+
+          <FormChild label="Anschrift">
+            <input type="text" className="input" />
+          </FormChild>
+
+          <FormChild label="Zweck">
+            <input type="text" className="input" />
+          </FormChild>
         </Form>
   
         <Footer />

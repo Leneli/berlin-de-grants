@@ -11,20 +11,25 @@ const defaultProps = {
   tooltip: '',
 };
 
+// TODO: tooltip component
+
 const FormChild = props => {
   const { label, tooltip, children } = props;
 
   if (label) {
     return (
-      <label>
-        <span className="form-label">{label}: ({tooltip})</span>
+      <label className="form-child-wrapper">
+        <span className="form-label">{label}:&nbsp;
+          {!!tooltip && <span>({tooltip})</span>}
+        </span>
+
         {children}
       </label>
     );
   }
 
   return (
-    <div>{children}</div>
+    <div className="form-child-wrapper">{children}</div>
   );
 };
 

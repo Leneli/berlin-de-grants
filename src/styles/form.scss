@@ -1,13 +1,49 @@
+@import './button.scss';
+@import './input.scss';
+
 .form-wrapper {
   padding: 20px 15px;
-  background-color: lightblue;
-  border: 1px solid darkcyan;
+  background-color: rgba(lightcyan, .3);
+  border: 1px solid rgba(darkcyan, .5);
   border-radius: 15px;
+}
+
+.form-title {
+  margin-bottom: 0;
+  margin-top: 0;
+  font-size: 26px;
+  color: darkcyan;
 }
 
 .form-label {
   display: block;
+  margin-bottom: 7px;
   font-size: 12px;
   font-weight: bold;
-  color: black;
+  color: rgb(92, 92, 92);
+}
+
+.form-buttons {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+
+  & > *:not(:first-child) {
+    margin-left: 15px;
+
+    @media screen and (max-width: 360px) {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.form-child-wrapper {
+  display: block;
+  margin-top: 15px;
 }

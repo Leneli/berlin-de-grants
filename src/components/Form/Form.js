@@ -4,7 +4,8 @@ import '../../styles/form.scss';
 
 const buttonsShape = {
   name: PropTypes.string,
-  type: PropTypes.oneOf(['primary', 'secondary']),
+  type: PropTypes.oneOf(['submit', 'reset', 'button']),
+  view: PropTypes.oneOf(['primary', 'secondary']),
   method: PropTypes.func,
 };
 
@@ -15,22 +16,28 @@ const propTypes = {
 
 const defaultProps = {
   title: '',
-  buttons: [{ name: 'Ok', type: 'primary', method: () => {}}],
+  buttons: [{ name: 'Ok', view: 'primary', type: 'submit', method: () => {}}],
 };
 
 const Form = props => {
   const { title, buttons, children } = props;
 
   return (
-    <div className="form-wrapper">
-      {!!title && <h3>{title}</h3>}
+    <form className="form-wrapper">
+      {!!title && <h3 className="form-title">{title}</h3>}
 
       <div>{children}</div>
 
-      <div>
-        {buttons.map((button, index) => <p key={`button_${index}`}>{button.name}</p>)}
+      <div className="form-buttons">
+        {buttons.map((button, index) =>
+          <button
+            key={`button_${index}`}
+            className={`button_${button.view}`}
+            type={button.type}
+            onClick={button.method}
+          >{button.name}</button>)}
       </div>
-    </div>
+    </form>
   );
 };
 
