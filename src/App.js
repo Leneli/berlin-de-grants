@@ -51,10 +51,7 @@ class App extends PureComponent {
   onInputChange = e => {
     const input = e.target;
     const { name, value } = input;
-    const newValue = {};
-
-    newValue[name] = value;
-    this.setState(newValue);
+    this.setState({ [name]: value });
   }
 
   render() {
