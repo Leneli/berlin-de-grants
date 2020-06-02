@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../../styles/select.scss';
 
-const ALL = '-- ALL --';
+const ALL = 'ALL';
 
 const propTypes = {
   list: PropTypes.array,
@@ -21,12 +21,41 @@ const defaultProps = {
 const Select = props => {
   const { list, hasAll, noSelected, selectedId } = props;
   const selected = selectedId ? list.find(option => option.id === selectedId) : undefined;
+  const [options, setOptions] = useState(list);
   const [value, setValue] = useState(noSelected ? '' : selected ? selected.value : ALL);
   const [visibleOptions, setVisibleOptions] = useState(false);
 
+  const onChangeInput = e => {
+    const value = e.target.value || '';
+    const newOptions = [];
+
+    for (let i = 0; i < list.length; i++) {
+      const label = list[i].label || '';
+      const index = label.toLowerCase().search(value.toLowerCase());
+      
+      if (index > -1) {
+        newOptions.push({
+          value: list[i].value,
+          label:
+            value ?
+              label.replace(new RegExp(value, 'i'), `<b>${label.slice(index, index + value.length)}</b>`) :
+              label,
+        });
+      }
+    }
+
+    setOptions(newOptions);
+    setValue(value);
+  };
+
+  const onClickOption = value => {
+    setOptions(list);
+    setValue(value);
+  };
+
   // TODO: render?
   // TODO: проверить selectedId и noSelected
-  // FIXME: fix list visibility methods
+  // TODO: стили для выбранного элемента (selected)
 
   return (
     <div className="select">
@@ -34,23 +63,22 @@ const Select = props => {
         type="text"
         className={`input ${visibleOptions && 'select-input'}`}
         value={value}
-        onFocus={() => { setVisibleOptions(true) }}
         onClick={() => { setVisibleOptions(!visibleOptions) }}
+        onChange={onChangeInput}
       />
 
       {visibleOptions && (
         <div className="options">
-          {hasAll && <div className="option" onClick={() => setValue(ALL)}>{ALL}-</div>}
+          {hasAll && <div className="option" onClick={() => setValue(ALL)}>{ALL}</div>}
 
-          {list.map((option, index) => {
+          {options.map((option, index) => {
             return (
               <div
                 key={`option_${index}`}
                 className="option"
-                onClick={() => { setValue(option.value) }}
-              >
-                {option.label}
-              </div>
+                onClick={() => { onClickOption(option.value) }}
+                dangerouslySetInnerHTML={{ __html: option.label }}
+              ></div>
             );
           })}
         </div>

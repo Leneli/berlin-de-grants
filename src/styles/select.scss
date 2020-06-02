@@ -27,6 +27,19 @@
   font-size: 16px;
   line-height: 1.5;
   color: #5c5c5c;
+  background: #fff;
+  transition: background .3s ease;
+
+  &:hover {
+    background: rgba(0, 139, 139, 0.1);
+  }
+
+  b {
+    color: darkorange;
+  }
 }
 
-.seleced {}
+.seleced {
+  background: rgba(0, 139, 139, 0.18);
+  border-color: darkcyan;
+}
