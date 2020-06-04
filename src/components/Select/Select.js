@@ -5,24 +5,31 @@ import '../../styles/select.scss';
 const ALL = 'ALL';
 
 const propTypes = {
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
   list: PropTypes.array,
   hasAll: PropTypes.bool,
   noSelected: PropTypes.bool,
   selectedId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func,
 };
 
 const defaultProps = {
+  value: '',
+  placeholder: '',
   list: [],
   hasAll: false,
   noSelected: false,
   selectedId: '',
+  onChange: () => {},
 };
 
 const Select = props => {
-  const { list, hasAll, noSelected, selectedId } = props;
+  const { name, value: defValue, placeholder, list, hasAll, noSelected, selectedId, onChange } = props;
   const selected = selectedId ? list.find(option => option.id === selectedId) : undefined;
   const [options, setOptions] = useState(list);
-  const [value, setValue] = useState(noSelected ? '' : selected ? selected.value : ALL);
+  const [value, setValue] = useState(noSelected ? defValue : selected ? selected.value : ALL);
   const [visibleOptions, setVisibleOptions] = useState(false);
 
   const onChangeInput = e => {
@@ -46,21 +53,32 @@ const Select = props => {
 
     setOptions(newOptions);
     setValue(value);
+    onChange(name, value);
   };
 
   const onClickOption = value => {
     setOptions(list);
     setValue(value);
+    onChange(name, value);
   };
 
+  const onClickAll = () => {
+    setValue(ALL)
+    onChange(name);
+  };
+
+  console.log('>>> SELECT Name', name);
+
   // TODO: render?
-  // TODO: проверить selectedId и noSelected
+  // TODO: проверить defValue, placeholder, selectedId и noSelected
   // TODO: стили для выбранного элемента (selected)
 
   return (
     <div className="select">
       <input
         type="text"
+        name={name}
+        placeholder={placeholder}
         className={`input ${visibleOptions && 'select-input'}`}
         value={value}
         onClick={() => { setVisibleOptions(!visibleOptions) }}
@@ -69,7 +87,7 @@ const Select = props => {
 
       {visibleOptions && (
         <div className="options">
-          {hasAll && <div className="option" onClick={() => setValue(ALL)}>{ALL}</div>}
+          {hasAll && <div className="option" onClick={onClickAll}>{ALL}</div>}
 
           {options.map((option, index) => {
             return (

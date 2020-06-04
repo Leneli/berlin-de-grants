@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import '../../styles/grant.scss';
 
 const propTypes = {
+  id: PropTypes.string.isRequired,
+  empfaengerid: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   geber: PropTypes.string.isRequired,
   art: PropTypes.string.isRequired,
@@ -20,10 +22,10 @@ const grantLine = (label, text) => (
 ); 
 
 const Grant = props => {
-  const { name, geber, art, jahr, anschrift, politikbereich, zweck, betrag } = props;
+  const { name, id, empfaengerid, geber, art, jahr, anschrift, politikbereich, zweck, betrag } = props;
 
   return (
-    <div className="grant">
+    <div className="grant" id={id} empfaenger={empfaengerid}>
       {grantLine('Name', name)}
       {grantLine('Geber', geber)}
       {grantLine('Art', art)}
