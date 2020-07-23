@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Map } from '../Map';
 import '../../styles/grant.scss';
 
 const propTypes = {
@@ -22,7 +23,10 @@ const grantLine = (label, text) => (
 ); 
 
 const Grant = props => {
+  const [showMap, setShowMap] = useState(false);
   const { name, id, empfaengerid, geber, art, jahr, anschrift, politikbereich, zweck, betrag } = props;
+
+  // TODO: styles for clicable item (address)
 
   return (
     <div className="grant" id={id} empfaenger={empfaengerid}>
@@ -30,10 +34,16 @@ const Grant = props => {
       {grantLine('Geber', geber)}
       {grantLine('Art', art)}
       {grantLine('Jahr', jahr)}
-      {grantLine('Anschrift', anschrift)}
+      <div onClick={() => setShowMap(!showMap)}>{grantLine('Anschrift', anschrift)}</div>
       {grantLine('Politikbereich', politikbereich)}
       {grantLine('Zweck', zweck)}
       {grantLine('Betrag', betrag)}
+
+      {showMap && (
+        <div>
+          <Map />
+        </div>
+      )}
     </div>
   );
 };

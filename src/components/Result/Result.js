@@ -1,30 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Grant } from '../Grant';
 import { Select } from '../Select';
 import { FormChild } from '../Form';
+import { SORT } from '../../constants';
+import getGrants from '../../api/grants'
 import '../../styles/result.scss';
 
 const propTypes = {
-  visibility: PropTypes.bool,
-  counter: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  perPage: PropTypes.number,
-  grants: PropTypes.array,
+  q: PropTypes.object,
+  orderName: PropTypes.string,
+  orderValue: PropTypes.string,
+  onOrderSelect: PropTypes.func,
 };
 
 const defaultProps = {
-  visibility: false,
-  counter: 0,
-  perPage: 0,
-  grants: [],
+  q: {},
+  orderName: '',
+  orderValue: '',
+  onOrderSelect: () => {},
 };
 
 // TODO: Pagination
 
 const Result = props => {
-  const { visibility, counter, grants } = props;
+  const { q, orderName, orderValue, onOrderSelect } = props;
+  const [grants, setGrants] = useState([]);
+  const [counter, setCounter] = useState(0);
+  const [perPage, setPerPage] = useState(0);
 
-  if (!visibility) return null;
+  console.log('>>> Q', q);
+  console.log('>>> ...', new URLSearchParams(q).toString());
+
+  useEffect(() => {
+    getGrants()
+      .then(response => {
+        const { grants, counter, perPage } = response;
+
+        setGrants(grants);
+        setCounter(counter);
+        setPerPage(perPage);
+      })
+      .catch(error => console.error(`Error in getGrants(): ${error}`));
+  }, [])
 
   return (
     <div className="result-wrapper">
@@ -32,7 +50,12 @@ const Result = props => {
       <p>Ihre Suche <b>ergab {counter} Ergebnisse</b>. Um weniger Treffer zu erhalten können Sie die Suche über die Suchmaske weiter einschränken.</p>
           
       <FormChild label="Sortieren nach">
-        <Select />
+        <Select
+          list={SORT}
+          name={orderName}
+          value={orderValue}
+          onChange={onOrderSelect}
+        />
       </FormChild>
           
       <div className="grants-wrapper">
